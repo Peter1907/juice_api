@@ -1,6 +1,6 @@
 class Api::V1::ArticlesController < ApplicationController
   def index
-    render json: { res: response_hash("success", Article.all), user: @current_user }, status: :ok
+    render json: response_hash("success", Article.all), status: :ok
   end
 
   def show

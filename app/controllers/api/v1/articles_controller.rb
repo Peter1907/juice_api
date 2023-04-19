@@ -1,52 +1,34 @@
 class Api::V1::ArticlesController < ApplicationController
   def index
-    render json: {
-      message: "success",
-      articles: Article.all
-    }, status: :ok
+    render json: { res: response_hash("success", Article.all), user: @current_user }, status: :ok
   end
 
   def show
-    render json: {
-      message: "success",
-      article: Article.find(params[:id])
-    }, status: :ok
+    render json: response_hash("success", Article.find(params[:id])), status: :ok
   end
 
   def create
     article = Article.new(article_params)
     if article.save
-      render json: {
-        message: "success",
-        article: article
-      }, status: :ok
+      render json: response_hash("success", article), status: :created
     else
-      render json: {
-        message: "error",
-        errors: article.errors
-      }, status: :unprocessable_entity
+      render json: response_hash("error", article.errors.full_messagees), status: :unprocessable_entity
     end
   end
 
   def update
     article = Article.find(params[:id])
     if article.update(article_params)
-      render json: {
-        message: "success",
-        article: article
-      }, status: :ok
+      render json: response_hash("success", article), status: :ok
     else
-      render json: {
-        message: "error",
-        errors: article.errors
-      }, status: :unprocessable_entity
+      render json: response_hash("error", article.errors.full_messages), status: :unprocessable_entity
     end
   end
 
   def destroy
     article = Article.find(params[:id])
     article.destroy
-    render json: { message: "Article deleted" }, status: :ok
+    render json: response_hash("success", "Article deleted successfully"), status: :ok
   end
 
   private
